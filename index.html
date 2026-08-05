@@ -1,0 +1,717 @@
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>100T EWC 2026 Club Championship Tracker</title>
+<style>
+  :root{
+    --bg:#F4F1ED; --surface:#FFFFFF; --surface-2:#EFE9E2; --surface-3:#E8E1D8;
+    --line:#DBD3C9; --line-strong:#C9BFB2;
+    --ink:#1B1613; --ink-2:#4A423B; --muted:#797066;
+    --accent:#D81E2C; --accent-ink:#FFFFFF; --accent-soft:#FBE7E7;
+    --good:#137C4F; --good-soft:#DBF0E4;
+    --warn:#9A6B12; --warn-soft:#F6E9CC;
+    --crit:#AB2536; --crit-soft:#F6DEE0;
+    --shadow:0 1px 2px rgba(26,20,15,.06),0 6px 20px rgba(26,20,15,.06);
+    --mono:ui-monospace,"SF Mono","Cascadia Mono","Segoe UI Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#131010; --surface:#1C1817; --surface-2:#231E1C; --surface-3:#2A2422;
+      --line:#332C29; --line-strong:#443B37;
+      --ink:#F2ECE7; --ink-2:#CDC3BB; --muted:#9A8F86;
+      --accent:#F0313D; --accent-ink:#FFFFFF; --accent-soft:#3A1B1C;
+      --good:#33B978; --good-soft:#163023;
+      --warn:#E0A93E; --warn-soft:#332711;
+      --crit:#E9596B; --crit-soft:#371C21;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 26px rgba(0,0,0,.34);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F4F1ED; --surface:#FFFFFF; --surface-2:#EFE9E2; --surface-3:#E8E1D8;
+    --line:#DBD3C9; --line-strong:#C9BFB2;
+    --ink:#1B1613; --ink-2:#4A423B; --muted:#797066;
+    --accent:#D81E2C; --accent-ink:#FFFFFF; --accent-soft:#FBE7E7;
+    --good:#137C4F; --good-soft:#DBF0E4;
+    --warn:#9A6B12; --warn-soft:#F6E9CC;
+    --crit:#AB2536; --crit-soft:#F6DEE0;
+    --shadow:0 1px 2px rgba(26,20,15,.06),0 6px 20px rgba(26,20,15,.06);
+  }
+  :root[data-theme="dark"]{
+    --bg:#131010; --surface:#1C1817; --surface-2:#231E1C; --surface-3:#2A2422;
+    --line:#332C29; --line-strong:#443B37;
+    --ink:#F2ECE7; --ink-2:#CDC3BB; --muted:#9A8F86;
+    --accent:#F0313D; --accent-ink:#FFFFFF; --accent-soft:#3A1B1C;
+    --good:#33B978; --good-soft:#163023;
+    --warn:#E0A93E; --warn-soft:#332711;
+    --crit:#E9596B; --crit-soft:#371C21;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 26px rgba(0,0,0,.34);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--sans); line-height:1.5;
+    font-feature-settings:"kern" 1;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1060px; margin:0 auto; padding:26px 20px 72px}
+  .tabnum{font-variant-numeric:tabular-nums}
+  .mono{font-family:var(--mono)}
+
+  .mast{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px}
+  .brand{display:flex; align-items:center; gap:12px}
+  .chevrons{display:flex; gap:3px}
+  .chevrons span{width:9px; height:20px; background:var(--accent); clip-path:polygon(0 0,62% 0,100% 50%,62% 100%,0 100%,38% 50%); opacity:.9}
+  .chevrons span:nth-child(2){opacity:.6}
+  .chevrons span:nth-child(3){opacity:.32}
+  .brand h1{font-size:15px; letter-spacing:.14em; text-transform:uppercase; margin:0; font-weight:800}
+  .brand p{margin:2px 0 0; font-size:12px; color:var(--muted); letter-spacing:.04em}
+  .themebtn{
+    font:inherit; font-size:12px; letter-spacing:.03em; color:var(--ink-2);
+    background:var(--surface); border:1px solid var(--line); border-radius:999px;
+    padding:7px 13px; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+  }
+  .themebtn:hover{border-color:var(--line-strong)}
+  .themebtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+  .hero{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); overflow:hidden; margin-bottom:20px;
+  }
+  .eligbar{display:flex; gap:9px; align-items:flex-start; padding:11px 22px; font-size:12.5px; line-height:1.45; background:var(--warn-soft); color:var(--warn); border-bottom:1px solid var(--line)}
+  .eligbar.crit{background:var(--crit-soft); color:var(--crit)}
+  .eligbar .ico{font-weight:800; flex:0 0 auto}
+  .eligbar b{color:inherit}
+  .hero-grid{display:grid; grid-template-columns:1.35fr 1fr; gap:0}
+  @media (max-width:720px){.hero-grid{grid-template-columns:1fr}}
+  .hero-main{padding:22px 24px; border-right:1px solid var(--line); position:relative}
+  @media (max-width:720px){.hero-main{border-right:none; border-bottom:1px solid var(--line)}}
+  .statusline{position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--muted)}
+  .eyebrow{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0 0 12px}
+  .statuspill{
+    display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:6px 12px; border-radius:999px;
+    background:var(--surface-2); color:var(--ink);
+  }
+  .statuspill .dot{width:9px; height:9px; border-radius:50%; background:var(--muted)}
+  .verdict{font-size:clamp(25px,4.2vw,38px); line-height:1.06; font-weight:850; letter-spacing:-.02em; margin:14px 0 8px; text-wrap:balance}
+  .subverdict{font-size:14px; color:var(--ink-2); margin:0; max-width:48ch}
+  .needline{margin-top:14px; font-size:13px; color:var(--muted)}
+  .needline b{color:var(--ink); font-family:var(--mono)}
+
+  .hero-side{padding:20px 22px; display:grid; grid-template-columns:1fr 1fr; gap:14px 18px; align-content:center}
+  .stat .k{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0 0 4px}
+  .stat .v{font-family:var(--mono); font-size:26px; font-weight:600; letter-spacing:-.01em; margin:0; line-height:1}
+  .stat .v small{font-size:14px; color:var(--muted); font-weight:500}
+  .stat.full{grid-column:1 / -1; padding-top:12px; border-top:1px dashed var(--line)}
+
+  section{margin-top:26px}
+  .sec-head{display:flex; align-items:baseline; gap:12px; margin:0 0 12px; flex-wrap:wrap}
+  .sec-head h2{font-size:13px; letter-spacing:.14em; text-transform:uppercase; font-weight:800; margin:0}
+  .sec-head .hint{font-size:12px; color:var(--muted)}
+
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow)}
+
+  .tablewrap{overflow-x:auto}
+  table{border-collapse:collapse; width:100%; min-width:560px}
+  thead th{
+    font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);
+    font-weight:700; text-align:right; padding:12px 14px; border-bottom:1px solid var(--line); white-space:nowrap;
+  }
+  thead th.l{text-align:left}
+  tbody td{padding:9px 14px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right; white-space:nowrap}
+  tbody td.l{text-align:left}
+  tbody tr:last-child td{border-bottom:none}
+  .rk{font-family:var(--mono); color:var(--muted); width:34px; font-size:13px}
+  .club{font-weight:600; display:flex; align-items:center; gap:9px}
+  .seedin{
+    width:66px; font-family:var(--mono); font-size:13px; text-align:right; color:var(--ink);
+    background:transparent; border:1px solid transparent; border-radius:7px; padding:4px 6px;
+  }
+  .seedin:hover{border-color:var(--line)}
+  .seedin:focus{outline:none; border-color:var(--accent); background:var(--surface-2)}
+  .delta{font-family:var(--mono); color:var(--good); font-size:12.5px}
+  .delta.zero{color:var(--muted); opacity:.5}
+  .total{font-family:var(--mono); font-weight:600; font-size:14.5px}
+  .pay{font-family:var(--mono); color:var(--ink-2); font-size:12.5px}
+  .pay.none{color:var(--muted); opacity:.5}
+  .med{white-space:nowrap; font-family:var(--mono); font-size:12px}
+  .med i{font-style:normal; font-weight:700; display:inline-block; width:18px; text-align:center}
+  .med .g{color:#C79A2E} .med .s{color:#9AA0A8} .med .b{color:#BC7C4E}
+  .med i.z{opacity:.28}
+  .med-head i{font-size:10px; letter-spacing:.03em}
+  .edot{display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:8px; flex:0 0 auto}
+  .edot.on{background:var(--good)}
+  .edot.off{background:transparent; box-shadow:inset 0 0 0 1.5px var(--muted)}
+  .eligtoggle{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
+  .eligtoggle button{font:inherit; font-size:11.5px; font-weight:600; letter-spacing:.02em; padding:5px 11px; background:var(--surface); color:var(--muted); border:none; cursor:pointer}
+  .eligtoggle button.active{background:var(--accent); color:var(--accent-ink)}
+  .eligtoggle button:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+
+  .tag{font-size:9.5px; letter-spacing:.07em; text-transform:uppercase; font-weight:700; padding:2px 6px; border-radius:5px; white-space:nowrap}
+  .tag.us{background:var(--accent); color:var(--accent-ink)}
+  .tag.rival{background:var(--crit-soft); color:var(--crit)}
+  .tag.locked{background:var(--surface-3); color:var(--muted)}
+  .tag.straggler{background:var(--surface-3); color:var(--muted)}
+
+  tr.us td{background:var(--accent-soft)}
+  tr.us td.l .club{color:var(--accent)}
+  tr.us td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+  tr.band td{background:var(--good-soft)}
+  tr.us.band td{background:color-mix(in srgb,var(--accent-soft) 62%,var(--good-soft))}
+  .cutrow td{
+    padding:5px 14px; text-align:center; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); font-weight:700; background:var(--surface-2); border-bottom:1px solid var(--line);
+  }
+
+  .logger{padding:16px}
+  .logrow{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end}
+  .field{display:flex; flex-direction:column; gap:5px; flex:1 1 150px; min-width:130px}
+  .field label{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700}
+  select{
+    font:inherit; font-size:13px; color:var(--ink); background:var(--surface-2);
+    border:1px solid var(--line); border-radius:9px; padding:9px 10px; cursor:pointer; width:100%;
+  }
+  select:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+  .addbtn{
+    font:inherit; font-weight:700; font-size:13px; letter-spacing:.02em;
+    background:var(--accent); color:var(--accent-ink); border:none; border-radius:9px;
+    padding:10px 18px; cursor:pointer; flex:0 0 auto;
+  }
+  .addbtn:hover{filter:brightness(1.06)}
+  .addbtn:focus-visible{outline:2px solid var(--ink); outline-offset:2px}
+  .logs{margin:16px 0 0; padding:14px 0 0; border-top:1px dashed var(--line); display:flex; flex-direction:column; gap:7px}
+  .logempty{font-size:12.5px; color:var(--muted); font-style:italic}
+  .logitem{display:flex; align-items:center; gap:10px; font-size:13px; padding:6px 10px; background:var(--surface-2); border-radius:8px}
+  .logitem .t{color:var(--muted); font-size:12px}
+  .logitem .who{font-weight:600}
+  .logitem .pl{font-family:var(--mono); font-size:12px; color:var(--good); margin-left:auto}
+  .logitem .pl.neg{color:var(--muted)}
+  .rm{font:inherit; font-size:14px; line-height:1; color:var(--muted); background:none; border:none; cursor:pointer; padding:2px 5px; border-radius:5px}
+  .rm:hover{color:var(--crit)}
+  .rm:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+  .toolbar{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:12px; flex-wrap:wrap}
+  .resetbtn{font:inherit; font-size:12px; color:var(--muted); background:none; border:1px solid var(--line); border-radius:8px; padding:7px 12px; cursor:pointer}
+  .resetbtn:hover{color:var(--crit); border-color:var(--crit)}
+
+  .fixgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:12px}
+  .fix{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:13px 14px; box-shadow:var(--shadow); position:relative; overflow:hidden}
+  .fix .fx-top{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:9px}
+  .fix h3{font-size:14px; margin:0; font-weight:700; letter-spacing:-.01em}
+  .fix .date{font-size:11px; color:var(--muted); font-family:var(--mono); white-space:nowrap}
+  .fx-line{display:flex; gap:7px; align-items:flex-start; font-size:12px; margin-top:6px}
+  .fx-ico{font-family:var(--mono); font-weight:700; flex:0 0 auto; width:14px; text-align:center}
+  .fx-for .fx-ico{color:var(--good)}
+  .fx-against .fx-ico{color:var(--crit)}
+  .fx-k{color:var(--muted); flex:0 0 auto; width:52px; text-transform:uppercase; letter-spacing:.05em; font-size:10px; padding-top:1px; font-weight:700}
+  .fx-v{color:var(--ink); font-weight:600}
+  .fix.keyus{border-color:var(--accent)}
+  .fix.keyus::before,.fix.decider::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px}
+  .fix.keyus::before{background:var(--accent)}
+  .fix.decider{border-color:var(--warn)}
+  .fix.decider::before{background:var(--warn)}
+  .flag{display:inline-block; font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:800; padding:2px 7px; border-radius:5px; margin-bottom:8px}
+  .flag.us{background:var(--accent); color:var(--accent-ink)}
+  .flag.dec{background:var(--warn-soft); color:var(--warn)}
+
+  .evt{padding:16px 18px}
+  .evt-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:18px}
+  .evt-head h3{margin:0; font-size:16px; font-weight:800; letter-spacing:-.01em}
+  .evt-sub{margin:3px 0 0; font-size:12px; color:var(--muted)}
+  .evt-status{font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:4px 9px; border-radius:6px; white-space:nowrap}
+  .evt-status.active{background:var(--accent-soft); color:var(--accent)}
+  .evt-status.done{background:var(--good-soft); color:var(--good)}
+  .evt-status.eliminated{background:var(--crit-soft); color:var(--crit)}
+  .evt-status.upcoming{background:var(--surface-3); color:var(--muted)}
+  .stepper{display:flex; align-items:flex-start; overflow-x:auto; padding:2px 0 4px}
+  .step{display:flex; flex-direction:column; align-items:center; gap:7px; flex:1 1 0; min-width:62px; position:relative}
+  .step .dot{width:14px; height:14px; border-radius:50%; background:var(--surface-3); box-shadow:inset 0 0 0 1.5px var(--line-strong); z-index:1}
+  .step .lbl{font-size:10px; letter-spacing:.02em; text-transform:uppercase; color:var(--muted); text-align:center; font-weight:700; line-height:1.25}
+  .step::before{content:""; position:absolute; top:6px; left:-50%; width:100%; height:2px; background:var(--line-strong)}
+  .step:first-child::before{display:none}
+  .step.done .dot{background:var(--good); box-shadow:none}
+  .step.done::before{background:var(--good)}
+  .step.cur .dot{background:var(--accent); box-shadow:0 0 0 4px var(--accent-soft)}
+  .step.cur .lbl{color:var(--accent)}
+  .step.cur::before{background:var(--good)}
+  .step.out .dot{background:var(--crit)}
+  .step.out .lbl{color:var(--crit)}
+  .step.out::before{background:var(--good)}
+  .evt-stats{display:flex; gap:26px; flex-wrap:wrap; margin-top:18px; padding-top:15px; border-top:1px dashed var(--line)}
+  .evt-stats .k{font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0 0 3px}
+  .evt-stats .v{font-family:var(--mono); font-size:15px; font-weight:600; margin:0}
+  .evt-note{margin:15px 0 0; font-size:12.5px; color:var(--ink-2); line-height:1.5}
+  .evt-roster{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 18px}
+  .rchip{font-family:var(--mono); font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:6px; background:var(--surface-2); color:var(--ink-2); border:1px solid var(--line)}
+  .rchip.coach{background:transparent; color:var(--muted); font-weight:500}
+  .evt-block{margin-top:16px; padding-top:14px; border-top:1px dashed var(--line)}
+  .mini-h{font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:700; margin:0 0 9px}
+  .matches{display:flex; flex-direction:column}
+  .match{display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:13px; padding:7px 0; border-bottom:1px solid var(--line)}
+  .match:last-child{border-bottom:none}
+  .mopp{font-weight:600}
+  .mwhen{font-family:var(--mono); font-size:12px; color:var(--muted)}
+  .mres{font-family:var(--mono); font-size:12px; font-weight:700; padding:2px 8px; border-radius:5px}
+  .mres.win{background:var(--good-soft); color:var(--good)}
+  .mres.loss{background:var(--crit-soft); color:var(--crit)}
+  .evt-scale{display:flex; flex-wrap:wrap; gap:6px 16px; margin:0; font-family:var(--mono); font-size:12.5px; color:var(--ink-2)}
+  .evt-scale b{color:var(--muted); font-weight:700; margin-right:2px}
+  .evt-fav{margin:0 0 8px; font-size:12.5px; color:var(--ink-2); line-height:1.5}
+  .evt-fav:last-child{margin-bottom:0}
+  .evt-fav .mini-h{display:inline; margin:0 8px 0 0}
+
+  .foot{margin-top:30px; padding-top:16px; border-top:1px solid var(--line); font-size:11.5px; color:var(--muted); line-height:1.6}
+  .foot b{color:var(--ink-2)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="brand">
+      <div class="chevrons" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <h1>100 Thieves Club Championship Watch</h1>
+        <p>Esports World Cup 2026: the race for a 9th&ndash;10th finish</p>
+      </div>
+    </div>
+    <button class="themebtn" id="themebtn" type="button" aria-label="Toggle light or dark theme">
+      <span id="themeicon">&#9680;</span><span id="themelbl">Theme</span>
+    </button>
+  </header>
+
+  <div class="hero">
+    <div class="eligbar" id="eligbar" style="display:none"></div>
+    <div class="hero-grid">
+      <div class="hero-main">
+        <div class="statusline" id="statusline"></div>
+        <p class="eyebrow">Live projected outcome for 100 Thieves</p>
+        <span class="statuspill" id="statuspill"><span class="dot"></span><span id="statustext">&ndash;</span></span>
+        <h2 class="verdict" id="verdict">&ndash;</h2>
+        <p class="subverdict" id="subverdict">&ndash;</p>
+        <div class="needline" id="needline"></div>
+      </div>
+      <div class="hero-side">
+        <div class="stat"><p class="k">Live rank</p><p class="v"><span id="statRank">&ndash;</span></p></div>
+        <div class="stat"><p class="k">Points</p><p class="v tabnum" id="statPts">&ndash;</p></div>
+        <div class="stat full"><p class="k" id="payLabel">Projected Club Championship payout at this rank</p><p class="v tabnum" id="statPay">&ndash;</p></div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <h2>Live leaderboard</h2>
+      <span class="hint">Green dot = payout-eligible &middot; <b class="g" style="color:#C79A2E">G</b>/<b class="s" style="color:#9AA0A8">S</b>/<b class="b" style="color:#BC7C4E">B</b> = gold/silver/bronze medals &middot; green band = the 9&ndash;10 target</span>
+      <span class="eligtoggle" id="eligtoggle" style="margin-left:auto">
+        <button type="button" data-mode="all" class="active">All clubs</button>
+        <button type="button" data-mode="elig">Eligible only</button>
+      </span>
+    </div>
+    <div class="card tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="l" style="width:34px">#</th>
+            <th class="l">Club</th>
+            <th class="l" title="Gold / Silver / Bronze medals"><span class="med med-head"><i class="g">G</i><i class="s">S</i><i class="b">B</i></span></th>
+            <th>Current</th>
+            <th>Logged</th>
+            <th>Total</th>
+            <th>Payout</th>
+          </tr>
+        </thead>
+        <tbody id="board"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Log a result</h2>
+      <span class="hint">As each tournament ends, add where a club placed and the board re-scores instantly</span>
+    </div>
+    <div class="card logger">
+      <div class="logrow">
+        <div class="field">
+          <label for="selTourn">Tournament</label>
+          <select id="selTourn"></select>
+        </div>
+        <div class="field">
+          <label for="selClub">Club</label>
+          <select id="selClub"></select>
+        </div>
+        <div class="field">
+          <label for="selPlace">Placement</label>
+          <select id="selPlace"></select>
+        </div>
+        <button class="addbtn" id="addbtn" type="button">Add result</button>
+      </div>
+      <div class="logs" id="logs"></div>
+      <div class="toolbar">
+        <span class="hint" style="font-size:11.5px">Saved automatically in this browser.</span>
+        <button class="resetbtn" id="resetbtn" type="button">Reset all logged results</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Remaining fixtures &amp; who to root for</h2>
+      <span class="hint">Cheer the locked top-5 to win everything except CoD, since their wins starve your rivals</span>
+    </div>
+    <div class="fixgrid" id="fixtures"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Call of Duty tracker</h2>
+      <span class="hint">100 Thieves progress in CoD: Black Ops 7</span>
+    </div>
+    <div class="card evt" id="evtCod"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Counter-Strike 2 tracker</h2>
+      <span class="hint">100 Thieves' road through CS2, the event decider</span>
+    </div>
+    <div class="card evt" id="evtCs2"></div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var STORE="ewc100t_v1";
+
+  var PAYOUT={1:7000000,2:5000000,3:4000000,4:3000000,5:2000000,6:1400000,7:1150000,8:950000,9:800000,10:650000,11:550000,12:500000,13:450000,14:400000,15:350000,16:300000,17:275000,18:250000,19:225000,20:200000,21:175000,22:150000,23:125000,24:100000};
+
+  /* EWC_SEEDS_START (auto-refreshed daily by ewc-standings-refresh.ps1; do not hand-edit between these markers) */
+  var SEED_DATA={"fal":2400,"navi":2250,"vp":2200,"vit":2000,"agal":1800,"vis":1750,"t1":1750,"zeta":1500,"tm":1400,"spr":1200,"aur":1150,"100t":1000,"g2":1000,"wbg":900,"reject":800,"jdg":700,"onic":700,"ssk":700,"geekay":650,"geng":600,"m8":400,"mibr":250,"mouz":0};
+  var SEED_ASOF="Aug 5, 2026 (Week 5 of 7)";
+  var HUND_TOP8=1;
+  var CLUB_META={"fal":{"t8":8,"g":1,"s":0,"b":0,"e":1},"navi":{"t8":3,"g":1,"s":1,"b":1,"e":1},"vp":{"t8":5,"g":1,"s":1,"b":0,"e":1},"vit":{"t8":6,"g":1,"s":0,"b":0,"e":1},"agal":{"t8":5,"g":0,"s":1,"b":1,"e":1},"vis":{"t8":2,"g":1,"s":1,"b":0,"e":1},"t1":{"t8":4,"g":0,"s":1,"b":1,"e":1},"zeta":{"t8":3,"g":1,"s":0,"b":0,"e":1},"tm":{"t8":4,"g":0,"s":1,"b":0,"e":1},"spr":{"t8":2,"g":1,"s":0,"b":0,"e":1},"aur":{"t8":3,"g":0,"s":1,"b":0,"e":1},"100t":{"t8":1,"g":1,"s":0,"b":0,"e":0},"g2":{"t8":1,"g":1,"s":0,"b":0,"e":0},"wbg":{"t8":4,"g":0,"s":0,"b":0,"e":1},"reject":{"t8":2,"g":0,"s":0,"b":1,"e":1},"jdg":{"t8":2,"g":0,"s":0,"b":1,"e":1},"onic":{"t8":2,"g":0,"s":0,"b":1,"e":1},"ssk":{"t8":2,"g":0,"s":0,"b":1,"e":1},"geekay":{"t8":2,"g":0,"s":0,"b":0,"e":1},"geng":{"t8":2,"g":0,"s":0,"b":1,"e":1},"m8":{"t8":2,"g":0,"s":0,"b":0,"e":1},"mibr":{"t8":2,"g":0,"s":0,"b":0,"e":1},"mouz":{"t8":0,"g":0,"s":0,"b":0,"e":0}};
+  var EVT_STATUS={"cod":{"stageIndex":0,"status":"active","record":"0-0","next":"vs Boston Breach (Aug 5, 12:15 PT)","placement":"","points":0,"matches":[{"opp":"Boston Breach","when":"Aug 5, 12:15 PT","result":"upcoming","score":"","win":null}],"note":"In Group B with OpTic, Team Falcons, Boston Breach, Team WaR, Team Heretics, Project Notorious and Vancouver Surge. Top 4 of the group reach the playoff; any top-8 overall finish is 100T's second top-8 (payout eligibility) plus points."},"cs2":{"stageIndex":0,"status":"upcoming","record":"","next":"Last Chance Qualifier (Aug 7-9)","placement":"","points":0,"matches":[],"note":"Not in the main field yet. This stacked roster (rain, dev1ce, Gizmy, coached by gla1ve) must finish top 4 of the 64-team LCQ (Aug 7-9) to reach the 32-team main event (Aug 12-23); a top-8 there would unlock eligibility. The overall decider."}};
+  /* EWC_SEEDS_END */
+
+  var CLUBS=[
+    {id:"fal",    name:"Team Falcons",       tier:"field"},
+    {id:"navi",   name:"Natus Vincere",      tier:"field"},
+    {id:"vp",     name:"Virtus.pro",         tier:"field"},
+    {id:"vit",    name:"Team Vitality",      tier:"field"},
+    {id:"agal",   name:"AG.AL International", tier:"field"},
+    {id:"vis",    name:"Team Vision",        tier:"field"},
+    {id:"t1",     name:"T1",                 tier:"field"},
+    {id:"zeta",   name:"ZETA DIVISION",      tier:"field"},
+    {id:"tm",     name:"Twisted Minds",      tier:"rival"},
+    {id:"spr",    name:"Team Spirit",        tier:"rival"},
+    {id:"aur",    name:"Aurora Gaming",      tier:"rival"},
+    {id:"100t",   name:"100 Thieves",        tier:"us"},
+    {id:"g2",     name:"G2 Esports",         tier:"field"},
+    {id:"wbg",    name:"Weibo Gaming",       tier:"field"},
+    {id:"reject", name:"REJECT",             tier:"field"},
+    {id:"jdg",    name:"JD Gaming",          tier:"field"},
+    {id:"onic",   name:"ONIC",               tier:"field"},
+    {id:"ssk",    name:"Saishunkan Sol",     tier:"field"},
+    {id:"geekay", name:"Geekay Esports",     tier:"field"},
+    {id:"geng",   name:"Gen.G Esports",      tier:"field"},
+    {id:"m8",     name:"Gentle Mates",       tier:"field"},
+    {id:"mibr",   name:"MIBR.LOS",           tier:"field"},
+    {id:"mouz",   name:"MOUZ",               tier:"field"}
+  ];
+  for(var _i=0;_i<CLUBS.length;_i++){CLUBS[_i].seed=(typeof SEED_DATA[CLUBS[_i].id]==="number"?SEED_DATA[CLUBS[_i].id]:0);}
+
+  var TIERLBL={us:"YOU",rival:"RIVAL",field:"",locked:"",straggler:""};
+
+  var PLACE=[
+    {id:"win",label:"Win / 1st  (+1000)",pts:1000},
+    {id:"p2", label:"2nd  (+750)",pts:750},
+    {id:"p3", label:"3rd  (+500)",pts:500},
+    {id:"p4", label:"4th  (+300)",pts:300},
+    {id:"p5", label:"5th  (+200)",pts:200},
+    {id:"p68",label:"6th to 8th  (+100)",pts:100},
+    {id:"non",label:"No points  (0)",pts:0}
+  ];
+
+  var FIX=[
+    {n:"Overwatch 2",       d:"Jul 29-Aug 1", f:"Team Falcons",         a:["Gen.G","T1"],            key:""},
+    {n:"CoD: Warzone",      d:"Jul 29-Aug 1", f:"any top-5",            a:[],                        key:""},
+    {n:"Street Fighter 6",  d:"Jul 28-31",    f:"Team Falcons",         a:["Team Vision"],           key:""},
+    {n:"MLBB (Men's)",      d:"to Aug 1",     f:"any top-5",            a:[],                        key:""},
+    {n:"Honor of Kings",    d:"to Aug 8",     f:"AG.AL",                a:["Weibo","Gen.G"],         key:""},
+    {n:"CoD: Black Ops 7",  d:"Aug 5-9",      f:"100 Thieves (top 8+)", a:[],                        key:"us"},
+    {n:"PUBG Mobile",       d:"August",       f:"AG.AL / top-5",        a:["Twisted Minds","Weibo"], key:""},
+    {n:"Tekken 8",          d:"August",       f:"Team Falcons",         a:["Team Vision"],           key:""},
+    {n:"Rainbow Six Siege", d:"August",       f:"Virtus.pro / Falcons", a:["Twisted Minds"],         key:""},
+    {n:"Rocket League",     d:"August",       f:"Vitality / Falcons",   a:["Gen.G"],                 key:""},
+    {n:"Chess",             d:"August",       f:"Team Vitality",        a:["any rival"],             key:""},
+    {n:"CrossFire",         d:"August",       f:"any top-5",            a:["Weibo"],                 key:""},
+    {n:"Trackmania",        d:"August",       f:"any top-5",            a:[],                        key:""},
+    {n:"Fortnite",          d:"August",       f:"Team Falcons",         a:["Gen.G"],                 key:""},
+    {n:"Counter-Strike 2",  d:"Aug 12-23",    f:"Vitality / Falcons",   a:["Team Spirit","Aurora"],  key:"dec"}
+  ];
+
+  var EVT_META={
+    cod:{
+      event:"CoD: Black Ops 7", dates:"Aug 5-9", prize:"$1.8M",
+      roster:["aBeZy","HyDra","Nium","Scrap"], coach:"Sender / ShAnE", group:"Group B",
+      format:"GSL group, all Bo5, top 4 of 8 advance; single-elim playoffs (Bo7, Bo9 final)",
+      stages:["Group (GSL)","Quarters","Semis","Final"],
+      payouts:[["1st",1000],["2nd",750],["3rd",500],["4th",300],["5-8th",200]],
+      favorites:"Team Falcons, OpTic, FaZe"
+    },
+    cs2:{
+      event:"Counter-Strike 2", dates:"Aug 12-23", prize:"$2M",
+      roster:["rain","poiii","sirah","dev1ce","Gizmy"], coach:"gla1ve",
+      format:"LCQ Aug 7-9 (64 teams, top 4 advance) then the 32-team main event Aug 12-23",
+      stages:["LCQ (Aug 7-9)","Main groups","Playoffs","Top 8","Final"],
+      payouts:[["1st",1000],["2nd",750],["3rd",500],["4th",300],["5-8th",200]],
+      favorites:"Team Spirit, Falcons, Vitality"
+    }
+  };
+
+  var state={logs:[],seeds:{}};
+  try{var raw=localStorage.getItem(STORE); if(raw){var p=JSON.parse(raw); if(p&&typeof p==="object"){state.logs=Array.isArray(p.logs)?p.logs:[]; state.seeds=p.seeds||{}; state.eligOnly=!!p.eligOnly;}}}catch(e){}
+
+  function save(){try{localStorage.setItem(STORE,JSON.stringify(state));}catch(e){}}
+  function clubById(id){for(var i=0;i<CLUBS.length;i++){if(CLUBS[i].id===id)return CLUBS[i];}return null;}
+  function seedOf(c){return (state.seeds.hasOwnProperty(c.id))?state.seeds[c.id]:c.seed;}
+  function placePts(pid){for(var i=0;i<PLACE.length;i++){if(PLACE[i].id===pid)return PLACE[i].pts;}return 0;}
+  function deltaOf(id){var s=0;for(var i=0;i<state.logs.length;i++){if(state.logs[i].c===id)s+=placePts(state.logs[i].p);}return s;}
+
+  function fmtMoney(n){if(n>=1000000){return "$"+(n/1000000).toFixed(2).replace(/0$/,"").replace(/\.0$/,"").replace(/\.$/,"")+"M";}return "$"+Math.round(n/1000)+"K";}
+  function fmtInt(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+
+  function standings(){
+    var rows=CLUBS.map(function(c){var s=seedOf(c),d=deltaOf(c.id);return {c:c,seed:s,delta:d,total:s+d};});
+    rows.sort(function(a,b){
+      if(b.total!==a.total)return b.total-a.total;
+      var ma=metaOf(a.c.id)||{}, mb=metaOf(b.c.id)||{};
+      if((mb.g||0)!==(ma.g||0))return (mb.g||0)-(ma.g||0);
+      if((mb.s||0)!==(ma.s||0))return (mb.s||0)-(ma.s||0);
+      if((mb.b||0)!==(ma.b||0))return (mb.b||0)-(ma.b||0);
+      return a.c.name.localeCompare(b.c.name);
+    });
+    for(var i=0;i<rows.length;i++)rows[i].rank=i+1;
+    return rows;
+  }
+
+  function ordinal(n){var s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+  function ptsToPlace(g){if(g<=200)return 5;if(g<=300)return 4;if(g<=500)return 3;if(g<=750)return 2;return 1;}
+  function metaOf(id){return (typeof CLUB_META!=="undefined"&&CLUB_META)?CLUB_META[id]:null;}
+  function isElig(id){var m=metaOf(id); if(!m)return false; if(typeof m.e==="number")return m.e===1; if(typeof m.e==="boolean")return m.e; return (m.t8>=2&&m.g>=1);}
+  function medalsHtml(id){var m=metaOf(id)||{g:0,s:0,b:0}; function cell(v,cls){v=v||0; return '<i class="'+cls+(v?"":" z")+'">'+v+'</i>';} return '<span class="med">'+cell(m.g,"g")+cell(m.s,"s")+cell(m.b,"b")+'</span>';}
+  function evtStatusLabel(s){return s.status==="active"?"In progress":s.status==="done"?(s.placement||"Complete"):s.status==="eliminated"?"Eliminated":"Upcoming";}
+  function matchRow(mt){
+    var w=(mt.result==="W"||mt.win===true), l=(mt.result==="L"||mt.win===false), right;
+    if(w||l){ right='<span class="mres '+(w?"win":"loss")+'">'+(w?"W":"L")+(mt.score?(" "+mt.score):"")+'</span>'; }
+    else { right='<span class="mwhen">'+(mt.when||"TBD")+'</span>'; }
+    return '<div class="match"><span class="mopp">vs '+(mt.opp||"TBD")+'</span>'+right+'</div>';
+  }
+  function renderEvt(elId,key){
+    var el=document.getElementById(elId); if(!el)return;
+    var meta=(typeof EVT_META!=="undefined"&&EVT_META)?EVT_META[key]:null;
+    var s=(typeof EVT_STATUS!=="undefined"&&EVT_STATUS)?EVT_STATUS[key]:null;
+    if(!meta){el.innerHTML="";return;} if(!s){s={stageIndex:-1,status:"upcoming"};}
+    var out='<div class="evt-head"><div><h3>'+meta.event+'</h3><p class="evt-sub">'+meta.dates+' &middot; '+meta.prize+' pool'+(meta.group?(' &middot; '+meta.group):'')+'</p></div><span class="evt-status '+(s.status||"upcoming")+'">'+evtStatusLabel(s)+'</span></div>';
+    if(meta.roster&&meta.roster.length){ out+='<div class="evt-roster">'; for(var ri=0;ri<meta.roster.length;ri++){out+='<span class="rchip">'+meta.roster[ri]+'</span>';} if(meta.coach){out+='<span class="rchip coach">Coach '+meta.coach+'</span>';} out+='</div>'; }
+    var idx=(typeof s.stageIndex==="number")?s.stageIndex:-1;
+    out+='<div class="stepper">';
+    for(var i=0;i<meta.stages.length;i++){ var cls=idx<0?"pending":(i<idx?"done":(i===idx?(s.status==="eliminated"?"out":(s.status==="done"?"done":"cur")):"pending")); out+='<div class="step '+cls+'"><span class="dot"></span><span class="lbl">'+meta.stages[i]+'</span></div>'; }
+    out+='</div>';
+    var secondLbl=s.placement?"Final placement":"Next", secondVal=s.placement?s.placement:(s.next||"TBD");
+    out+='<div class="evt-stats"><div><p class="k">Record</p><p class="v">'+(s.record?s.record:"&ndash;")+'</p></div><div><p class="k">'+secondLbl+'</p><p class="v">'+secondVal+'</p></div><div><p class="k">CC points</p><p class="v">'+((s.points>0)?("+"+fmtInt(s.points)):"0")+'</p></div></div>';
+    if(s.matches&&s.matches.length){ out+='<div class="evt-block"><p class="mini-h">Schedule &amp; results</p><div class="matches">'; for(var m=0;m<s.matches.length;m++){out+=matchRow(s.matches[m]);} out+='</div></div>'; }
+    if(meta.payouts&&meta.payouts.length){ out+='<div class="evt-block"><p class="mini-h">Club Championship points by placement</p><p class="evt-scale">'; for(var p=0;p<meta.payouts.length;p++){ out+='<span><b>'+meta.payouts[p][0]+'</b> '+meta.payouts[p][1]+'</span>'; } out+='</p></div>'; }
+    if(meta.favorites||meta.format){ out+='<div class="evt-block">'; if(meta.favorites){out+='<p class="evt-fav"><span class="mini-h">Favorites</span>'+meta.favorites+'</p>';} if(meta.format){out+='<p class="evt-fav"><span class="mini-h">Format</span>'+meta.format+'</p>';} out+='</div>'; }
+    if(s.note){ out+='<p class="evt-note">'+s.note+'</p>'; }
+    el.innerHTML=out;
+  }
+
+  function render(){
+    var rows=standings();
+    var me=null,tenth=null,eleventh=null;
+    for(var i=0;i<rows.length;i++){if(rows[i].c.id==="100t")me=rows[i]; if(rows[i].rank===10)tenth=rows[i]; if(rows[i].rank===11)eleventh=rows[i];}
+
+    var cls,stat,verdict,sub;
+    var r=me.rank;
+    if(r<=8){cls="good";stat="Ahead of target";verdict=ordinal(r)+" place, above the money target";sub="Projected inside the top 8, better than the 9–10 goal. Protect the cushion and don't let a rival bank a title.";}
+    else if(r<=10){cls="good";stat="On target, in the 9–10 zone";verdict=ordinal(r)+" place, inside the 9–10 window";sub="Exactly where you want to be. Hold position through the Counter-Strike finale.";}
+    else if(r<=12){cls="warn";stat="On the bubble";verdict=ordinal(r)+" place, just outside";sub="Within striking distance. A CoD top-2, or one rival stumble, flips this back to green.";}
+    else{cls="crit";stat="Door closing";verdict=ordinal(r)+" place, outside contention";sub="The 9–10 door is closing. You need your own points (CoD) plus rivals to misfire.";}
+
+    var accent=cls==="good"?"var(--good)":cls==="warn"?"var(--warn)":"var(--crit)";
+    document.getElementById("statusline").style.background=accent;
+    var sp=document.getElementById("statuspill");
+    sp.style.background=cls==="good"?"var(--good-soft)":cls==="warn"?"var(--warn-soft)":"var(--crit-soft)";
+    sp.style.color=accent;
+    sp.querySelector(".dot").style.background=accent;
+    document.getElementById("statustext").textContent=stat;
+    document.getElementById("verdict").textContent=verdict;
+    document.getElementById("subverdict").textContent=sub;
+
+    document.getElementById("statRank").textContent=ordinal(r);
+    document.getElementById("statPts").innerHTML=fmtInt(me.total)+' <small>pts</small>';
+    var eligible=(typeof HUND_TOP8==="number")?(HUND_TOP8>=2):true;
+    var payStr=(r<=24?fmtMoney(PAYOUT[r]):"none (outside top 24)");
+    var payLabel=document.getElementById("payLabel");
+    var statPay=document.getElementById("statPay");
+    var eb=document.getElementById("eligbar");
+    if(eligible){
+      payLabel.textContent="Projected Club Championship payout at this rank";
+      statPay.innerHTML=payStr;
+      eb.style.display="none";
+    } else {
+      var eligNote=(r<=24)?(payStr+' at '+ordinal(r)+' once eligible'):('outside the paid top 24');
+      payLabel.textContent="Claimable payout today (not yet eligible)";
+      statPay.innerHTML='$0 <small>('+eligNote+')</small>';
+      eb.style.display="flex";
+      eb.className="eligbar"+(HUND_TOP8<1?" crit":"");
+      eb.innerHTML='<span class="ico">&#9888;</span><span><b>Not payout-eligible yet.</b> 100T has '+HUND_TOP8+' of the 2 top-8 finishes required to claim any Club Championship money, so today the claimable payout is $0. A second top-8 (CoD, live now, or CS2) unlocks the '+payStr+' this rank pays.</span>';
+    }
+
+    var need=document.getElementById("needline");
+    if(r<=10){
+      var cushion=eleventh?(me.total-eleventh.total):null;
+      need.innerHTML=cushion!=null?('Cushion above the 11th-place line: <b>+'+fmtInt(cushion)+' pts</b>'):'';
+    }else{
+      var gap=tenth?(tenth.total-me.total+1):null;
+      need.innerHTML=gap!=null?('Gap to 10th place: <b>'+fmtInt(gap)+' pts</b>, about a top-'+ptsToPlace(gap)+' finish somewhere'):'';
+    }
+
+    // eligible sub-ranking = the real payout board (points desc among eligible clubs)
+    var eligRows=rows.filter(function(x){return isElig(x.c.id);});
+    for(var er=0;er<eligRows.length;er++){eligRows[er].eligRank=er+1;}
+    var eligOnly=!!state.eligOnly;
+    var view=eligOnly?eligRows:rows;
+
+    var tb=document.getElementById("board"); tb.innerHTML="";
+    for(var j=0;j<view.length;j++){
+      var row=view[j], c=row.c;
+      var dispRank=eligOnly?row.eligRank:row.rank;
+      var elig=isElig(c.id);
+      var payN=(elig&&row.eligRank&&row.eligRank<=24)?PAYOUT[row.eligRank]:0;
+      var payTxt=elig?(payN?fmtMoney(payN):"n/a"):"$0";
+      var tr=document.createElement("tr");
+      var band=(dispRank===9||dispRank===10);
+      tr.className=(c.tier==="us"?"us ":"")+(band?"band":"");
+      var tlbl=TIERLBL[c.tier]||"";
+      var tag=tlbl?('<span class="tag '+c.tier+'">'+tlbl+'</span>'):"";
+      var edot='<span class="edot '+(elig?"on":"off")+'" title="'+(elig?"Payout-eligible":"Not on the official board yet (needs a 2nd top-8)")+'"></span>';
+      tr.innerHTML=
+        '<td class="l rk">'+dispRank+'</td>'+
+        '<td class="l"><span class="club">'+edot+c.name+(tag?(" "+tag):"")+'</span></td>'+
+        '<td class="l">'+medalsHtml(c.id)+'</td>'+
+        '<td><input class="seedin tabnum" type="number" step="50" data-id="'+c.id+'" value="'+row.seed+'" aria-label="Current points for '+c.name+'"></td>'+
+        '<td><span class="delta '+(row.delta?"":"zero")+'">'+(row.delta?"+"+fmtInt(row.delta):"0")+'</span></td>'+
+        '<td class="total tabnum">'+fmtInt(row.total)+'</td>'+
+        '<td class="pay '+(payN?"":"none")+'">'+payTxt+'</td>';
+      tb.appendChild(tr);
+      if(dispRank===10){
+        var cut=document.createElement("tr"); cut.className="cutrow";
+        cut.innerHTML='<td colspan="7">&#9650; inside the money-contender zone &middot; 10th-place cut line &middot; below = outside 9&ndash;10 &#9660;</td>';
+        tb.appendChild(cut);
+      }
+    }
+    if(!view.length){ tb.innerHTML='<tr><td colspan="7" style="padding:16px;text-align:center;color:var(--muted)">No eligible clubs in the tracked set yet.</td></tr>'; }
+    var ins=tb.querySelectorAll(".seedin");
+    for(var k=0;k<ins.length;k++){ins[k].addEventListener("change",onSeed);}
+
+    renderLogs();
+  }
+
+  function onSeed(e){
+    var id=e.target.getAttribute("data-id"); var v=parseInt(e.target.value,10);
+    if(isNaN(v))v=0; state.seeds[id]=v; save(); render();
+  }
+
+  function renderLogs(){
+    var box=document.getElementById("logs"); box.innerHTML="";
+    if(!state.logs.length){box.innerHTML='<span class="logempty">No results logged yet. The board shows the official banked points above.</span>';return;}
+    for(var i=state.logs.length-1;i>=0;i--){
+      var L=state.logs[i], c=clubById(L.c), pl=null;
+      for(var q=0;q<PLACE.length;q++){if(PLACE[q].id===L.p)pl=PLACE[q];}
+      var pts=pl?pl.pts:0;
+      var el=document.createElement("div"); el.className="logitem";
+      el.innerHTML='<span class="t">'+L.t+'</span><span class="who">'+(c?c.name:"?")+'</span>'+
+        '<span class="pl '+(pts?"":"neg")+'">'+(pts?"+"+pts+" pts":"0 pts")+'</span>'+
+        '<button class="rm" type="button" data-i="'+i+'" aria-label="Remove result">&#10005;</button>';
+      box.appendChild(el);
+    }
+    var rms=box.querySelectorAll(".rm");
+    for(var j=0;j<rms.length;j++){rms[j].addEventListener("click",function(e){
+      var idx=parseInt(e.target.getAttribute("data-i"),10); state.logs.splice(idx,1); save(); render();
+    });}
+  }
+
+  (function(){
+    var st=document.getElementById("selTourn");
+    for(var i=0;i<FIX.length;i++){var o=document.createElement("option"); o.value=FIX[i].n; o.textContent=FIX[i].n+"  /  "+FIX[i].d; st.appendChild(o);}
+    var sc=document.getElementById("selClub");
+    var ordered=CLUBS.slice().sort(function(a,b){if(a.tier==="us")return -1;if(b.tier==="us")return 1;return 0;});
+    for(var j=0;j<ordered.length;j++){var oc=document.createElement("option"); oc.value=ordered[j].id; oc.textContent=ordered[j].name+(ordered[j].tier==="us"?"  (you)":ordered[j].tier==="rival"?"  (rival)":""); sc.appendChild(oc);}
+    var sp=document.getElementById("selPlace");
+    for(var k=0;k<PLACE.length;k++){var op=document.createElement("option"); op.value=PLACE[k].id; op.textContent=PLACE[k].label; sp.appendChild(op);}
+  })();
+
+  document.getElementById("addbtn").addEventListener("click",function(){
+    var t=document.getElementById("selTourn").value;
+    var c=document.getElementById("selClub").value;
+    var p=document.getElementById("selPlace").value;
+    state.logs.push({t:t,c:c,p:p}); save(); render();
+  });
+  document.getElementById("resetbtn").addEventListener("click",function(){
+    if(state.logs.length && !confirm("Clear all logged results? Seed corrections are kept."))return;
+    state.logs=[]; save(); render();
+  });
+
+  (function(){
+    var tg=document.getElementById("eligtoggle"); if(!tg)return;
+    var btns=tg.querySelectorAll("button");
+    function setActive(mode){ for(var q=0;q<btns.length;q++){ btns[q].classList.toggle("active", btns[q].getAttribute("data-mode")===mode); } }
+    setActive(state.eligOnly?"elig":"all");
+    for(var i=0;i<btns.length;i++){ btns[i].addEventListener("click",function(e){ state.eligOnly=(e.target.getAttribute("data-mode")==="elig"); setActive(e.target.getAttribute("data-mode")); save(); render(); }); }
+  })();
+
+  (function(){
+    var wrap=document.getElementById("fixtures");
+    for(var i=0;i<FIX.length;i++){
+      var f=FIX[i], div=document.createElement("div");
+      div.className="fix"+(f.key==="us"?" keyus":f.key==="dec"?" decider":"");
+      var flag=f.key==="us"?'<span class="flag us">Your team &middot; a top-8 finish = payout-eligible</span>':f.key==="dec"?'<span class="flag dec">The decider</span>':"";
+      var against=f.a.length?f.a.join(", "):"no direct rival";
+      div.innerHTML=flag+
+        '<div class="fx-top"><h3>'+f.n+'</h3><span class="date">'+f.d+'</span></div>'+
+        '<div class="fx-line fx-for"><span class="fx-ico">&#10004;</span><span class="fx-k">For</span><span class="fx-v">'+f.f+'</span></div>'+
+        '<div class="fx-line fx-against"><span class="fx-ico">&#10008;</span><span class="fx-k">Against</span><span class="fx-v">'+against+'</span></div>';
+      wrap.appendChild(div);
+    }
+  })();
+
+  renderEvt("evtCod","cod");
+  renderEvt("evtCs2","cs2");
+
+  document.getElementById("foot").innerHTML=
+    '<b>How this works.</b> Seeds are the official banked Club Championship points as of '+SEED_ASOF+', refreshed daily from the official EWC ranking and Liquipedia; the top six are locked well above the bubble and shown for context. A club must record two top-8 finishes to claim any payout, so 100T (one top-8, the VALORANT win) is not eligible yet, which is why the claimable payout shows as $0 until a second top-8 lands. Point values use the standard bracket scale (1st 1000, 2nd 750, 3rd 500, 4th 300, 5th 200); battle-royale and TFT tails differ slightly. This is a projection tool, not official data. The CS2 final (Aug 23) is the real decider. Log results as they land and the verdict re-scores live.';
+
+  var root=document.documentElement;
+  function syncIcon(){
+    var dark = root.getAttribute("data-theme")==="dark" || (!root.getAttribute("data-theme") && window.matchMedia("(prefers-color-scheme:dark)").matches);
+    document.getElementById("themeicon").textContent=dark?"☀":"☽";
+    document.getElementById("themelbl").textContent=dark?"Light":"Dark";
+  }
+  document.getElementById("themebtn").addEventListener("click",function(){
+    var cur=root.getAttribute("data-theme");
+    var dark = cur==="dark" || (!cur && window.matchMedia("(prefers-color-scheme:dark)").matches);
+    root.setAttribute("data-theme",dark?"light":"dark"); syncIcon();
+  });
+  try{window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change",syncIcon);}catch(e){}
+
+  syncIcon();
+  render();
+})();
+</script>
