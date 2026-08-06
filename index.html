@@ -261,6 +261,9 @@
   .evt-fav{margin:0 0 8px; font-size:12.5px; color:var(--ink-2); line-height:1.5}
   .evt-fav:last-child{margin-bottom:0}
   .evt-fav .mini-h{display:inline; margin:0 8px 0 0}
+  .evt-stakes{margin-top:16px; padding:12px 14px; background:var(--accent-soft); border:1px solid var(--accent); border-radius:10px; font-size:13px; line-height:1.5; color:var(--ink)}
+  .evt-stakes .mini-h{display:block; color:var(--accent); margin:0 0 5px}
+  .updated{margin:6px 0 0; font-size:11px; color:var(--muted); font-family:var(--mono); letter-spacing:.02em}
 
   .foot{margin-top:30px; padding-top:16px; border-top:1px solid var(--line); font-size:11.5px; color:var(--muted); line-height:1.6}
   .foot b{color:var(--ink-2)}
@@ -274,6 +277,7 @@
       <div>
         <h1>100 Thieves Club Championship Watch</h1>
         <p>Esports World Cup 2026: the race for a 9th&ndash;10th finish</p>
+        <p class="updated" id="updated"></p>
       </div>
     </div>
     <button class="themebtn" id="themebtn" type="button" aria-label="Toggle light or dark theme">
@@ -395,7 +399,7 @@
   var SEED_ASOF="Aug 6, 2026 (Week 5 of 7)";
   var HUND_TOP8=1;
   var CLUB_META={"fal":{"t8":8,"g":1,"s":0,"b":0,"e":1},"navi":{"t8":3,"g":1,"s":1,"b":1,"e":1},"vp":{"t8":5,"g":1,"s":1,"b":0,"e":1},"vit":{"t8":6,"g":1,"s":0,"b":0,"e":1},"agal":{"t8":6,"g":0,"s":1,"b":1,"e":1},"vis":{"t8":2,"g":1,"s":1,"b":0,"e":1},"t1":{"t8":4,"g":0,"s":1,"b":1,"e":1},"zeta":{"t8":3,"g":1,"s":0,"b":0,"e":1},"tm":{"t8":4,"g":0,"s":1,"b":0,"e":1},"spr":{"t8":2,"g":1,"s":0,"b":0,"e":1},"aur":{"t8":3,"g":0,"s":1,"b":0,"e":1},"100t":{"t8":1,"g":1,"s":0,"b":0,"e":0},"g2":{"t8":1,"g":1,"s":0,"b":0,"e":0},"wbg":{"t8":4,"g":0,"s":0,"b":0,"e":1},"reject":{"t8":2,"g":0,"s":0,"b":1,"e":1},"jdg":{"t8":2,"g":0,"s":0,"b":1,"e":1},"onic":{"t8":2,"g":0,"s":0,"b":1,"e":1},"ssk":{"t8":2,"g":0,"s":0,"b":1,"e":1},"geekay":{"t8":3,"g":0,"s":0,"b":0,"e":1},"geng":{"t8":2,"g":0,"s":0,"b":1,"e":1},"m8":{"t8":2,"g":0,"s":0,"b":0,"e":1},"mibr":{"t8":2,"g":0,"s":0,"b":0,"e":1},"mouz":{"t8":0,"g":0,"s":0,"b":0,"e":0}};
-  var EVT_STATUS={"cod":{"stageIndex":0,"status":"active","record":"1-0","next":"OpTic Gaming, Aug 6 12:45 EDT (9:45 PT)","placement":"","points":0,"note":"Opened 3-0 over Boston Breach on Aug 5 (Bo5). The OpTic Gaming match had not started at the time of this read, the page still showed a countdown. No Club Championship points bank until the event closes Aug 9.","matches":[{"opp":"Boston Breach","when":"Aug 5, 15:15 EDT (12:15 PT)","result":"W","score":"3-0","win":true},{"opp":"OpTic Gaming","when":"Aug 6, 12:45 EDT (9:45 PT)","result":"upcoming","score":"","win":null}]},"cs2":{"stageIndex":0,"status":"upcoming","record":"","next":"","placement":"","points":0,"note":"Last Chance Qualifier runs Aug 7-9 in Paris, 64 teams for a $100,000 pool, and only the top 4 reach the 32-team main event (Aug 12-23). 100 Thieves is listed in the field with no result yet and no individual matches posted.","matches":[]}};
+  var EVT_STATUS={"cod":{"stageIndex":0,"status":"active","stakes":"Beating OpTic today reaches the upper-bracket final and clinches a playoff spot, which is 100T's second top-8. That unlocks Club Championship eligibility and puts them on the money board (about $650K at ~10th, more the further they run). A loss drops them to the lower bracket: still alive to qualify, but no longer in their own hands.","record":"1-0","next":"OpTic Gaming, Aug 6 12:45 EDT (9:45 PT)","placement":"","points":0,"note":"Opened 3-0 over Boston Breach on Aug 5 (Bo5). The OpTic Gaming match had not started at the time of this read, the page still showed a countdown. No Club Championship points bank until the event closes Aug 9.","matches":[{"opp":"Boston Breach","when":"Aug 5, 15:15 EDT (12:15 PT)","result":"W","score":"3-0","win":true},{"opp":"OpTic Gaming","when":"Aug 6, 12:45 EDT (9:45 PT)","result":"upcoming","score":"","win":null}]},"cs2":{"stageIndex":0,"status":"upcoming","stakes":"Not on the money board until 100T clears the Last Chance Qualifier (Aug 7-9): only the top 4 of 64 reach the main event, where a top-8 would be the second top-8 that unlocks eligibility. The backup route if CoD falls short.","record":"","next":"","placement":"","points":0,"note":"Last Chance Qualifier runs Aug 7-9 in Paris, 64 teams for a $100,000 pool, and only the top 4 reach the 32-team main event (Aug 12-23). 100 Thieves is listed in the field with no result yet and no individual matches posted.","matches":[]}};
   /* EWC_SEEDS_END */
 
   var CLUBS=[
@@ -525,6 +529,7 @@
     out+='</div>';
     var secondLbl=s.placement?"Final placement":"Next", secondVal=s.placement?s.placement:(s.next||"TBD");
     out+='<div class="evt-stats"><div><p class="k">Record</p><p class="v">'+(s.record?s.record:"&ndash;")+'</p></div><div><p class="k">'+secondLbl+'</p><p class="v">'+secondVal+'</p></div><div><p class="k">CC points</p><p class="v">'+((s.points>0)?("+"+fmtInt(s.points)):"0")+'</p></div></div>';
+    if(s.stakes){ out+='<div class="evt-stakes"><span class="mini-h">What\'s at stake now</span>'+s.stakes+'</div>'; }
     if(s.matches&&s.matches.length){ out+='<div class="evt-block"><p class="mini-h">Schedule &amp; results</p><div class="matches">'; for(var m=0;m<s.matches.length;m++){out+=matchRow(s.matches[m]);} out+='</div></div>'; }
     if(meta.payouts&&meta.payouts.length){ out+='<div class="evt-block"><p class="mini-h">Club Championship points by placement</p><p class="evt-scale">'; for(var p=0;p<meta.payouts.length;p++){ out+='<span><b>'+meta.payouts[p][0]+'</b> '+meta.payouts[p][1]+'</span>'; } out+='</p></div>'; }
     if(meta.favorites||meta.format){ out+='<div class="evt-block">'; if(meta.favorites){out+='<p class="evt-fav"><span class="mini-h">Favorites</span>'+meta.favorites+'</p>';} if(meta.format){out+='<p class="evt-fav"><span class="mini-h">Format</span>'+meta.format+'</p>';} out+='</div>'; }
@@ -694,6 +699,7 @@
 
   renderEvt("evtCod","cod");
   renderEvt("evtCs2","cs2");
+  try{ document.getElementById("updated").textContent="Data as of "+SEED_ASOF+"  ·  auto-refreshes 8am / 12pm / 5pm PT"; }catch(e){}
 
   document.getElementById("foot").innerHTML=
     '<b>How this works.</b> Seeds are the official banked Club Championship points as of '+SEED_ASOF+', refreshed daily from the official EWC ranking and Liquipedia; the top six are locked well above the bubble and shown for context. A club must record two top-8 finishes to claim any payout, so 100T (one top-8, the VALORANT win) is not eligible yet, which is why the claimable payout shows as $0 until a second top-8 lands. Point values use the standard bracket scale (1st 1000, 2nd 750, 3rd 500, 4th 300, 5th 200); battle-royale and TFT tails differ slightly. This is a projection tool, not official data. The CS2 final (Aug 23) is the real decider. Log results as they land and the verdict re-scores live.';
